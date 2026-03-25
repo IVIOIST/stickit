@@ -1,4 +1,4 @@
-#stickit
+# stickit
 
 A lightweight terminal based sticky note board written in C++.
 
