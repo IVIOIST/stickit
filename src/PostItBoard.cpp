@@ -24,12 +24,7 @@ void PostItBoard::listPostIts() const {
     std::cout << "\n===== POST-IT BOARD =====\n";
 
     for (const auto& p : postits) {
-        std::cout << "[" << p.id << "] ";
-        if (p.pinned) {
-            std::cout << "[PINNED] ";
-        }
-        std::cout << "[" << p.color << "]\n";
-        std::cout << p.title << " - " << p.message << "\n\n";
+        displayPostIt(p);
     }
 
     std::cout << "=========================\n";
@@ -44,21 +39,29 @@ void PostItBoard::displayLogo() {
              " |_____/ \\__|_|\\___|_|\\_\\_|\\__|\n";
 }
 
+void PostItBoard::displayPostIt(const PostIt& src) const {
+    std::cout << "[" << src.id << "] ";
+    if (src.pinned) {
+        std::cout << "[PINNED] ";
+    }
+
+    std::cout << "[" << src.color << "]\n";
+    std::cout << src.title << " - " << src.message << "\n\n";
+}
+
 void PostItBoard::searchPostIt() {
     int id;
     
     std::cout << "Enter Post-it ID: ";
     std::cin >> id;
 
+    std::cout << "===== SEARCH RESULT =====\n";
     for (const auto& p : postits) {
-        if (p.id == id) { 
-            std::cout << "[" << p.id << "] ";
-            if (p.pinned) {
-                std::cout << "[PINNED] ";
-            }
-            std::cout << "[" << p.color << "]\n";
-            std::cout << p.title << " - " << p.message << "\n\n";
+        if (p.id == id) {
+            displayPostIt(p);
+            return;
         }
     }
+    std::cout << "Post-it with ID " << id << " not found.\n";
 
 }

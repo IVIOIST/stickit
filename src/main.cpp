@@ -15,14 +15,14 @@ int main() {
         std::cout << "4. Quit\n";
         std::cout << "Enter Choice: ";
         
-        if (std::cin >> choice) {
-            break;
-        } else {
+        if (!(std::cin >> choice)) {
             std::cout << "Invalid choice.\n";
             std::cin.clear();
-
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            continue;
         }
+
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
         if (choice == 1) {
             board.createPostIt();
@@ -32,6 +32,8 @@ int main() {
             board.searchPostIt();
         } else if (choice == 4) {
             break;
+        } else {
+            std::cout << "Please enter a number from 1 to 4.\n";
         }
     }
 
