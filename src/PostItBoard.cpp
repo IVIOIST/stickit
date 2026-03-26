@@ -22,8 +22,21 @@ void PostItBoard::createPostIt() {
 
 void PostItBoard::listPostIts() const {
     std::cout << "\n===== POST-IT BOARD =====\n";
+    std::vector<PostIt> pinned, unpinned;
 
     for (const auto& p : postits) {
+        if (p.pinned) {
+            pinned.push_back(p);
+        } else {
+            unpinned.push_back(p);
+        }
+    }
+
+    for (const auto& p : pinned) {
+        displayPostIt(p);
+    }
+
+    for (const auto& p : unpinned) {
         displayPostIt(p);
     }
 
@@ -66,4 +79,35 @@ const PostIt* PostItBoard::searchPostIt(int id) const {
         }
     }
     return nullptr;
+}
+
+void PostItBoard::deletePostIt(int id) {
+    for (int i = 0; i < postits.size(); i++) {
+        if (postits[i].id == id) {
+            postits.erase(postits.begin() + i);
+            std::cout << "Post-it with ID " << id << " deleted.\n";
+            return;
+        }
+    }
+    std::cout << "Post-it with ID " << id << " not found.\n";
+}
+
+void PostItBoard::unpinPostIt(int id) {
+    const PostIt* p = searchPostIt(id);
+    if (p) {
+        const_cast<PostIt*>(p)->pinned = false;
+        std::cout << "Post-it with ID " << id << " unpinned.\n";
+    } else {
+        std::cout << "Post-it with ID " << id << " not found.\n";
+    }
+}
+
+void PostItBoard::pinPostIt(int id) {
+    const PostIt* p = searchPostIt(id);
+    if (p) {
+        const_cast<PostIt*>(p)->pinned = true;
+        std::cout << "Post-it with ID " << id << " pinned.\n";
+    } else {
+        std::cout << "Post-it with ID " << id << " not found.\n";
+    }
 }

@@ -19,6 +19,9 @@ public:
     void displayLogo();
     void displayPostIt(const PostIt& src) const;
     void displayPostIt(int id) const;
+    void deletePostIt(int id);
+    void pinPostIt(int id);
+    void unpinPostIt(int id);
 };
 
 #endif
