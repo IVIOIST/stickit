@@ -43,3 +43,22 @@ void PostItBoard::displayLogo() {
              "  ____) | |_| | (__|   <| | |_ \n"
              " |_____/ \\__|_|\\___|_|\\_\\_|\\__|\n";
 }
+
+void PostItBoard::searchPostIt() {
+    int id;
+    
+    std::cout << "Enter Post-it ID: ";
+    std::cin >> id;
+
+    for (const auto& p : postits) {
+        if (p.id == id) { 
+            std::cout << "[" << p.id << "] ";
+            if (p.pinned) {
+                std::cout << "[PINNED] ";
+            }
+            std::cout << "[" << p.color << "]\n";
+            std::cout << p.title << " - " << p.message << "\n\n";
+        }
+    }
+
+}

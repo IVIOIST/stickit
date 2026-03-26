@@ -16,6 +16,7 @@ public:
     void createPostIt();
     void listPostIts() const;
     void displayLogo();
+    void searchPostIt();
 };
 
 #endif
