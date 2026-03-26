@@ -8,6 +8,7 @@
 class PostItBoard {
 private:
     std::vector<PostIt> postits;
+    const PostIt* searchPostIt(int id) const;
     int next_id;
 
 public:
@@ -16,8 +17,8 @@ public:
     void createPostIt();
     void listPostIts() const;
     void displayLogo();
-    void searchPostIt();
-    void displayPostIt(const PostIt& src) const; 
+    void displayPostIt(const PostIt& src) const;
+    void displayPostIt(int id) const;
 };
 
 #endif

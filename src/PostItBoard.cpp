@@ -49,19 +49,21 @@ void PostItBoard::displayPostIt(const PostIt& src) const {
     std::cout << src.title << " - " << src.message << "\n\n";
 }
 
-void PostItBoard::searchPostIt() {
-    int id;
-    
-    std::cout << "Enter Post-it ID: ";
-    std::cin >> id;
+void PostItBoard::displayPostIt(int id) const {
+    PostIt p;
+    if (const PostIt* found = searchPostIt(id)) {
+            displayPostIt(*found);
+        } else {
+            std::cout << "Post-it with ID " << id << " not found.\n";
+        }
+}
 
-    std::cout << "===== SEARCH RESULT =====\n";
+
+const PostIt* PostItBoard::searchPostIt(int id) const {
     for (const auto& p : postits) {
         if (p.id == id) {
-            displayPostIt(p);
-            return;
+            return &p;
         }
     }
-    std::cout << "Post-it with ID " << id << " not found.\n";
-
+    return nullptr;
 }
