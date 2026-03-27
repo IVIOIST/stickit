@@ -63,7 +63,6 @@ void PostItBoard::displayPostIt(const PostIt& src) const {
 }
 
 void PostItBoard::displayPostIt(int id) const {
-    PostIt p;
     if (const PostIt* found = searchPostIt(id)) {
             displayPostIt(*found);
         } else {
@@ -81,8 +80,17 @@ const PostIt* PostItBoard::searchPostIt(int id) const {
     return nullptr;
 }
 
+PostIt *PostItBoard::searchPostIt(int id) {
+    for (auto & p : postits) {
+        if (p.id == id) {
+            return &p;
+        }
+    }
+    return nullptr;
+}
+
 void PostItBoard::deletePostIt(int id) {
-    for (int i = 0; i < postits.size(); i++) {
+    for (size_t i = 0; i < postits.size(); i++) {
         if (postits[i].id == id) {
             postits.erase(postits.begin() + i);
             std::cout << "Post-it with ID " << id << " deleted.\n";
@@ -93,9 +101,9 @@ void PostItBoard::deletePostIt(int id) {
 }
 
 void PostItBoard::unpinPostIt(int id) {
-    const PostIt* p = searchPostIt(id);
+    PostIt *p = searchPostIt(id);
     if (p) {
-        const_cast<PostIt*>(p)->pinned = false;
+        p->pinned = false;
         std::cout << "Post-it with ID " << id << " unpinned.\n";
     } else {
         std::cout << "Post-it with ID " << id << " not found.\n";
@@ -103,10 +111,40 @@ void PostItBoard::unpinPostIt(int id) {
 }
 
 void PostItBoard::pinPostIt(int id) {
-    const PostIt* p = searchPostIt(id);
+    PostIt* p = searchPostIt(id);
     if (p) {
-        const_cast<PostIt*>(p)->pinned = true;
+        p->pinned = true;
         std::cout << "Post-it with ID " << id << " pinned.\n";
+    } else {
+        std::cout << "Post-it with ID " << id << " not found.\n";
+    }
+}
+
+void PostItBoard::setPostItColor(int id, const std::string& color) {
+    PostIt* p = searchPostIt(id);
+    if (p) {
+        p->color = color;
+        std::cout << "Post-it with ID " << id << " color updated.\n";
+    } else {
+        std::cout << "Post-it with ID " << id << " not found.\n";
+    }
+}
+
+void PostItBoard::setPostItTitle(int id, const std::string& title) {
+    PostIt* p = searchPostIt(id);
+    if (p) {
+        p->title = title;
+        std::cout << "Post-it with ID " << id << " title updated.\n";
+    } else {
+        std::cout << "Post-it with ID " << id << " not found.\n";
+    }
+}
+
+void PostItBoard::setPostItMessage(int id, const std::string& message) {
+    PostIt* p = searchPostIt(id);
+    if (p) {
+        p->message = message;
+        std::cout << "Post-it with ID " << id << " message updated.\n";
     } else {
         std::cout << "Post-it with ID " << id << " not found.\n";
     }

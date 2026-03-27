@@ -7,8 +7,10 @@
 
 class PostItBoard {
 private:
+    std::string filename = "postits.json";
     std::vector<PostIt> postits;
     const PostIt* searchPostIt(int id) const;
+    PostIt* searchPostIt(int id);
     int next_id;
 
 public:
@@ -22,6 +24,10 @@ public:
     void deletePostIt(int id);
     void pinPostIt(int id);
     void unpinPostIt(int id);
+
+    void setPostItColor(int id, const std::string& color);
+    void setPostItTitle(int id, const std::string& title);
+    void setPostItMessage(int id, const std::string& message);
 };
 
 #endif
