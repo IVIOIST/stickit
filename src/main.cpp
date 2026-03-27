@@ -17,7 +17,9 @@ int main() {
                              "4. Search Post It\n"
                              "5. Delete Post It\n"
                              "6. Pin Post It\n"
-                             "7. Quit\nEnter Choice: ");
+                             "7. Save to File\n"
+                             "8. Load from File\n"
+                             "9. Quit\nEnter Choice: ");
 
         switch (choice) {
             case 1:
@@ -60,6 +62,13 @@ int main() {
                 break;
             }
             case 7: {
+                board.saveToFile();
+                break;
+            }
+            case 8: {
+                board.loadFromFile();
+                break;
+            } case 9: {
                 std::cout << "GOODBYE";
                 return 0;
             }

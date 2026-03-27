@@ -7,7 +7,7 @@
 
 class PostItBoard {
 private:
-    std::string filename = "postits.json";
+    std::string filename = "postits.txt";
     std::vector<PostIt> postits;
     const PostIt* searchPostIt(int id) const;
     PostIt* searchPostIt(int id);
@@ -28,6 +28,10 @@ public:
     void setPostItColor(int id, const std::string& color);
     void setPostItTitle(int id, const std::string& title);
     void setPostItMessage(int id, const std::string& message);
+
+
+    void saveToFile() const;
+    void loadFromFile();
 };
 
 #endif

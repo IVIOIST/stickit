@@ -1,0 +1,4 @@
+1|Hello World|The quick brown fox jumps over the lazy dog|Blue|0
+2|Stickit|Stickit supremacy|Yellow|0
+3|The quick brown|fox jumps over the lazy dog|Pink|0
+4|Lorem ipsum|Lorem ipsum dolor sit amet, consectetur adipiscing elit|Green|0

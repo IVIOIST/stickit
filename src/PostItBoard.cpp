@@ -1,5 +1,6 @@
 #include "PostItBoard.hpp"
 #include <iostream>
+#include <fstream>
 
 PostItBoard::PostItBoard() : next_id(1) {}
 
@@ -147,5 +148,59 @@ void PostItBoard::setPostItMessage(int id, const std::string& message) {
         std::cout << "Post-it with ID " << id << " message updated.\n";
     } else {
         std::cout << "Post-it with ID " << id << " not found.\n";
+    }
+}
+
+void PostItBoard::saveToFile() const {
+    std::fstream out(filename.c_str(), std::ios::out);
+    if (!out) {
+        std::cerr << "Error opening file for writing: " << filename << "\n";
+        return;
+    }
+
+    for (const auto& p : postits) {
+        out << p.id << "|" << p.title << "|" << p.message << "|" << p.color << "|" << p.pinned << "\n";
+    }
+}
+
+void PostItBoard::loadFromFile() {
+   std::fstream in(filename, std::ios::in);
+    if (!in) {
+        std::cerr << "Error opening file for reading: " << filename << "\n";
+        return;
+    }
+
+    postits.clear();
+    std::string line;
+
+    while (std::getline(in, line)) {
+        PostIt p;
+        size_t pos = 0;
+        std::string token;
+
+        // ID
+        pos = line.find('|');
+        p.id = std::stoi(line.substr(0, pos));
+        line.erase(0, pos + 1);
+
+        // Title
+        pos = line.find('|');
+        p.title = line.substr(0, pos);
+        line.erase(0, pos + 1);
+
+        // Message
+        pos = line.find('|');
+        p.message = line.substr(0, pos);
+        line.erase(0, pos + 1);
+
+        // Color
+        pos = line.find('|');
+        p.color = line.substr(0, pos);
+        line.erase(0, pos + 1);
+
+        // Pinned
+        p.pinned = (line == "1");
+
+        postits.push_back(p);
     }
 }
