@@ -53,12 +53,6 @@ stickit delete --id=4
 stickit pin --id=4
 stickit unpin --id=4
 ```
-
-### File Override
-```Bash
-stickit add --title="X" --message="Y" --color=green --file=custom.txt
-```
-
 ---
 ## Example
 ```
