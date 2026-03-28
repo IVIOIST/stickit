@@ -2,9 +2,11 @@
 #include <iostream>
 #include <fstream>
 
+#include "ColorUtils.hpp"
+
 PostItBoard::PostItBoard() : next_id(1) {}
 
-void PostItBoard::createPostIt(std::string &title, std::string &message, std::string &color) {
+void PostItBoard::createPostIt(std::string &title, std::string &message, Color color) {
     PostIt p;
     p.id = next_id++;
     p.pinned = false;
@@ -21,11 +23,8 @@ void PostItBoard::createPostIt(std::string &title, std::string &message, std::st
         p.message = "---";
     }
 
-    if (! color.empty()) {
-        p.color = color;
-    } else {
-        p.color = "---";
-    }
+    p.color = color;
+
     postits.push_back(p);
 }
 
@@ -64,13 +63,13 @@ void PostItBoard::displayLogo() {
 }
 
 void PostItBoard::displayPostIt(const PostIt& src) const {
+    std::cout << colorToAnsi(src.color);
     std::cout << "[" << src.id << "] ";
     if (src.pinned) {
-        std::cout << "[PINNED] ";
+        std::cout << "[PINNED]";
     }
-
-    std::cout << "[" << src.color << "]\n";
-    std::cout << src.title << " - " << src.message << "\n\n";
+    std::cout << "\n" << src.title << " - " << src.message << "\n\n";
+    std::cout << "\033[0m\n";
 }
 
 void PostItBoard::displayPostIt(int id) const {
@@ -134,7 +133,7 @@ void PostItBoard::pinPostIt(int id) {
 void PostItBoard::setPostItColor(int id, const std::string& color) {
     PostIt* p = searchPostIt(id);
     if (p) {
-        p->color = color;
+        p->color = stringToColor(color);
         std::cout << "Post-it with ID " << id << " color updated.\n";
     } else {
         std::cout << "Post-it with ID " << id << " not found.\n";
@@ -169,7 +168,7 @@ void PostItBoard::saveToFile() const {
     }
 
     for (const auto& p : postits) {
-        out << p.id << "|" << p.title << "|" << p.message << "|" << p.color << "|" << p.pinned << "\n";
+        out << p.id << "|" << p.title << "|" << p.message << "|" << colorToString(p.color) << "|" << p.pinned << "\n";
     }
 }
 
@@ -205,7 +204,7 @@ void PostItBoard::loadFromFile() {
         line.erase(0, pos + 1);
 
         pos = line.find('|');
-        p.color = std::string(line.substr(0, pos));
+        p.color = stringToColor(std::string(line.substr(0, pos)));
         line.erase(0, pos + 1);
 
         p.pinned = (line == "1");

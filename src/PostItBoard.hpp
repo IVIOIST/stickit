@@ -16,7 +16,7 @@ private:
 public:
     PostItBoard();
 
-    void createPostIt(std::string &title, std::string &message, std::string &color);
+    void createPostIt(std::string &title, std::string &message, Color color);
     void listPostIts(bool pinnedOnly);
     void displayLogo();
     void displayPostIt(const PostIt& src) const;

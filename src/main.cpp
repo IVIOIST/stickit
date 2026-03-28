@@ -1,6 +1,7 @@
 #include <iostream>
 #include <limits>
 #include "PostItBoard.hpp"
+#include "ColorUtils.hpp"
 
 enum class Command {
     Add,
@@ -9,6 +10,7 @@ enum class Command {
     Search,
     Pin,
     Unpin,
+    Edit,
     Unknown
 };
 
@@ -27,6 +29,7 @@ void handleDelete(int argc, char*argv[], PostItBoard &postItBoard);
 void handleSearch(int argc, char*argv[], PostItBoard &postItBoard);
 void handlePin(int argc, char*argv[], PostItBoard &postItBoard);
 void handleUnpin(int argc, char*argv[], PostItBoard &postItBoard);
+void handleEdit(int argc, char*argv[], PostItBoard &postItBoard);
 
 int main(int argc, char* argv[]) {
     PostItBoard board;
@@ -52,6 +55,9 @@ int main(int argc, char* argv[]) {
             break;
         case Command::Unpin:
             handleUnpin(argc, argv, board);
+            break;
+        case Command::Edit:
+            handleEdit(argc, argv, board);
             break;
         default:
             std::cout << "not implemented.\n";
@@ -146,6 +152,10 @@ Command parseCommand(const std::string& cmd) {
         return Command::Unpin;
     }
 
+    if (cmd == "edit") {
+        return Command::Edit;
+    }
+
     return Command::Unknown;
 }
 
@@ -153,7 +163,7 @@ void handleAdd(int argc, char* argv[], PostItBoard &postItBoard) {
     postItBoard.loadFromFile();
     std::string title = getFlagArg(argc, argv, "--title=");
     std::string message = getFlagArg(argc, argv, "--message=");
-    std::string color = getFlagArg(argc, argv, "--color=");
+    Color color = stringToColor(getFlagArg(argc, argv, "--color="));
 
     postItBoard.createPostIt(title, message, color);
     postItBoard.saveToFile();
@@ -184,5 +194,30 @@ void handleUnpin(int argc, char* argv[], PostItBoard &postItBoard) {
     postItBoard.loadFromFile();
     int targetId = getFlagId(argc, argv, "--id=");
     postItBoard.unpinPostIt(targetId);
+    postItBoard.saveToFile();
+}
+
+void handleEdit(int argc, char *argv[], PostItBoard &postItBoard) {
+    postItBoard.loadFromFile();
+    int targetId = getFlagId(argc, argv, "--id=");
+    bool titleEdit = flagExists(argc, argv, "--title=");
+    bool messageEdit = flagExists(argc, argv, "--message=");
+    bool colorEdit = flagExists(argc, argv, "--color=");
+
+    if (titleEdit) {
+        std::string newTitle = getFlagArg(argc, argv, "--title=");
+        postItBoard.setPostItTitle(targetId, newTitle);
+    }
+
+    if (messageEdit) {
+        std::string newMessage = getFlagArg(argc, argv, "--message=");
+        postItBoard.setPostItMessage(targetId, newMessage);
+    }
+
+    if (colorEdit) {
+       std::string newColor = getFlagArg(argc, argv, "--color=");
+        postItBoard.setPostItColor(targetId, newColor);
+    }
+
     postItBoard.saveToFile();
 }

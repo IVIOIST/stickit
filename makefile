@@ -1,7 +1,7 @@
 CXX = g++
 CXXFLAGS = -std=c++17 -Wall -Wextra -g
 
-SRC = src/main.cpp src/PostItBoard.cpp
+SRC = src/main.cpp src/PostItBoard.cpp src/ColorUtils.cpp
 OBJ = $(SRC:.cpp=.o)
 TARGET = stickit
 

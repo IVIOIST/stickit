@@ -3,11 +3,22 @@
 
 #include <string>
 
+enum class Color {
+    Default,
+    Red,
+    Green,
+    Yellow,
+    Blue,
+    Magenta,
+    Cyan,
+    White
+};
+
 struct PostIt {
     int id;
     std::string title;
     std::string message;
-    std::string color;
+    Color color;
     bool pinned;
 };
 

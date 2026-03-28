@@ -1,2 +1,2 @@
 1|groceries|buy milk and eggs|blue|0
-2|todo|have fun and code|green|0
+2|Reminder|have fun and code|green|0
