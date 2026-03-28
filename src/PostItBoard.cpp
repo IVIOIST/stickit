@@ -29,7 +29,7 @@ void PostItBoard::createPostIt(std::string &title, std::string &message, std::st
     postits.push_back(p);
 }
 
-void PostItBoard::listPostIts() {
+void PostItBoard::listPostIts(bool pinnedOnly) {
     std::cout << "\n===== POST-IT BOARD =====\n";
     std::vector<PostIt> pinned, unpinned;
 
@@ -45,8 +45,10 @@ void PostItBoard::listPostIts() {
         displayPostIt(p);
     }
 
-    for (const auto& p : unpinned) {
-        displayPostIt(p);
+    if (!pinnedOnly) {
+        for (const auto& p : unpinned) {
+            displayPostIt(p);
+        }
     }
 
     std::cout << "=========================\n";
