@@ -16,6 +16,7 @@ enum class Command {
 int readInt(const std::string& prompt);
 std::string readString(const std::string& prompt);
 std::string getFlagArg(int argc, char* argv[], const std::string &flag);
+int getFlagId(int argc, char* argv[], const std::string &flag);
 Command parseCommand(const std::string &cmd);
 
 
@@ -38,6 +39,9 @@ int main(int argc, char* argv[]) {
             break;
         case Command::List:
             handleList(board);
+            break;
+        case Command::Delete:
+            handleDelete(argc, argv, board);
             break;
         default:
             std::cout << "not implemented.\n";
@@ -70,7 +74,7 @@ std::string readString(const std::string& prompt) {
 }
 
 std::string getFlagArg(int argc, char* argv[], const std::string &flag) {
-    for (int i =1; i < argc; i++) {
+    for (int i = 1; i < argc; i++) {
         std::string arg = argv[i];
 
         size_t pos = arg.rfind(flag);
@@ -82,6 +86,20 @@ std::string getFlagArg(int argc, char* argv[], const std::string &flag) {
     }
     return "";
     }
+
+int getFlagId(int argc, char* argv[], const std::string &flag) {
+    for (int i = 1; i < argc; i++) {
+        std::string arg = argv[i];
+
+        size_t pos = arg.rfind(flag);
+
+        if (pos != std::string::npos) {
+            return std::stoi(arg.substr(pos + flag.length(), arg.length()));
+        }
+    }
+
+    return -1;
+}
 
 Command parseCommand(const std::string& cmd) {
     if (cmd == "add") {
@@ -121,4 +139,12 @@ void handleAdd(int argc, char* argv[], PostItBoard &postItBoard) {
 void handleList(PostItBoard &postItBoard) {
     postItBoard.loadFromFile();
     postItBoard.listPostIts();
+}
+
+void handleDelete(int argc, char* argv[], PostItBoard &postItBoard) {
+    postItBoard.loadFromFile();
+    int targetId = getFlagId(argc, argv, "--id=");
+
+    postItBoard.deletePostIt(targetId);
+    postItBoard.saveToFile();
 }

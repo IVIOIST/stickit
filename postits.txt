@@ -1,3 +1,2 @@
 1|groceries|buy milk and eggs|blue|0
-2|work|remember lecture on tuesday|red|0
-3|Untitled3|---|---|0
+2|todo|have fun and code|green|0
