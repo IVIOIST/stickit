@@ -4,24 +4,32 @@
 
 PostItBoard::PostItBoard() : next_id(1) {}
 
-void PostItBoard::createPostIt() {
+void PostItBoard::createPostIt(std::string &title, std::string &message, std::string &color) {
     PostIt p;
     p.id = next_id++;
     p.pinned = false;
 
-    std::cout << "Enter title: ";
-    std::getline(std::cin, p.title);
+    if (!title.empty()) {
+        p.title = title;
+    } else {
+        p.title = "Untitled" + std::to_string(p.id);
+    }
 
-    std::cout << "Enter message: ";
-    std::getline(std::cin, p.message);
+    if (!message.empty()) {
+        p.message = message;
+    } else {
+        p.message = "---";
+    }
 
-    std::cout << "Enter color: ";
-    std::getline(std::cin, p.color);
-
+    if (! color.empty()) {
+        p.color = color;
+    } else {
+        p.color = "---";
+    }
     postits.push_back(p);
 }
 
-void PostItBoard::listPostIts() const {
+void PostItBoard::listPostIts() {
     std::cout << "\n===== POST-IT BOARD =====\n";
     std::vector<PostIt> pinned, unpinned;
 
@@ -164,43 +172,46 @@ void PostItBoard::saveToFile() const {
 }
 
 void PostItBoard::loadFromFile() {
-   std::fstream in(filename, std::ios::in);
+    std::fstream in(filename, std::ios::in);
+
+    postits.clear();
+    next_id = 1;
+
     if (!in) {
-        std::cerr << "Error opening file for reading: " << filename << "\n";
         return;
     }
 
-    postits.clear();
     std::string line;
 
     while (std::getline(in, line)) {
+        if (line.empty()) {
+            continue;
+        }
         PostIt p;
         size_t pos = 0;
-        std::string token;
 
-        // ID
         pos = line.find('|');
         p.id = std::stoi(line.substr(0, pos));
         line.erase(0, pos + 1);
 
-        // Title
         pos = line.find('|');
-        p.title = line.substr(0, pos);
+        p.title = std::string(line.substr(0, pos));
         line.erase(0, pos + 1);
 
-        // Message
         pos = line.find('|');
-        p.message = line.substr(0, pos);
+        p.message = std::string(line.substr(0, pos));
         line.erase(0, pos + 1);
 
-        // Color
         pos = line.find('|');
-        p.color = line.substr(0, pos);
+        p.color = std::string(line.substr(0, pos));
         line.erase(0, pos + 1);
 
-        // Pinned
         p.pinned = (line == "1");
 
         postits.push_back(p);
+
+        if (p.id >= next_id) {
+            next_id = p.id + 1;
+        }
     }
 }

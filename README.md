@@ -24,6 +24,41 @@ It is designed as a learning project to build foundations in C++, focusing on:
 - Delete Notes
 - Persistent storage (save + load from file)
 
+## Commands
+### Add
+```Bash
+stickit add --title="Reminder" --message="Buy milk" --color=yellow
+```
+
+### Edit
+```Bash
+stickit edit --id=4 --title="Urgent reminder"
+stickit edit --id=4 --message="Buy milk and eggs"
+stickit edit --id=4 --color=red
+```
+
+### List
+```Bash
+stickit list
+stickit list --pinned
+```
+
+### Delete
+```Bash
+stickit delete --id=4
+```
+
+### Pin/Unpin
+```Bash
+stickit pin --id=4
+stickit unpin --id=4
+```
+
+### File Override
+```Bash
+stickit add --title="X" --message="Y" --color=green --file=custom.txt
+```
+
 ---
 ## Example
 ```

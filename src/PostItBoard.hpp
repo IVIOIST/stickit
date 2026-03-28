@@ -16,8 +16,8 @@ private:
 public:
     PostItBoard();
 
-    void createPostIt();
-    void listPostIts() const;
+    void createPostIt(std::string &title, std::string &message, std::string &color);
+    void listPostIts();
     void displayLogo();
     void displayPostIt(const PostIt& src) const;
     void displayPostIt(int id) const;

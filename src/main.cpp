@@ -2,81 +2,49 @@
 #include <limits>
 #include "PostItBoard.hpp"
 
+enum class Command {
+    Add,
+    List,
+    Delete,
+    Search,
+    Pin,
+    Unpin,
+    Unknown
+};
+
+
 int readInt(const std::string& prompt);
 std::string readString(const std::string& prompt);
+std::string getFlagArg(int argc, char* argv[], const std::string &flag);
+Command parseCommand(const std::string &cmd);
 
-int main() {
+
+void handleAdd(int argc, char*argv[], PostItBoard &postItBoard);
+void handleList(PostItBoard &postItBoard);
+void handleDelete(int argc, char*argv[], PostItBoard &postItBoard);
+void handleSearch(int argc, char*argv[], PostItBoard &postItBoard);
+void handlePin(int argc, char*argv[], PostItBoard &postItBoard);
+void handleUnpin(int argc, char*argv[], PostItBoard &postItBoard);
+
+int main(int argc, char* argv[]) {
     PostItBoard board;
 
-    board.displayLogo();
+    std::string command = argv[1];
+    Command cmd = parseCommand(command);
 
-    while (true) {
-        int choice = readInt("\n1. Create Post-it"
-                             "\n2. Edit Post-it"
-                             "\n3. List Post-its\n"
-                             "4. Search Post It\n"
-                             "5. Delete Post It\n"
-                             "6. Pin Post It\n"
-                             "7. Save to File\n"
-                             "8. Load from File\n"
-                             "9. Quit\nEnter Choice: ");
-
-        switch (choice) {
-            case 1:
-                board.createPostIt();
-                break;
-            case 2: {
-                int editChoice = readInt("1. Edit Title\n2. Edit Message\n3. Edit Color\nEnter Choice: ");
-                int id = readInt("Enter Post-it ID to edit: ");
-                if (editChoice == 1) {
-                    std::string newTitle = readString("Enter new title: ");
-                    board.setPostItTitle(id, newTitle);
-                } else if (editChoice == 2) {
-                    std::string newMessage = readString("Enter new message: ");
-                    board.setPostItMessage(id, newMessage);
-                } else if (editChoice == 3) {
-                    std::string newColor = readString("Enter new color: ");
-                    board.setPostItColor(id, newColor);
-                } else {
-                    std::cout << "Invalid edit choice.\n";
-                }
-                break;
-            }
-            case 3: {
-                board.listPostIts();
-                break;
-            }
-            case 4: {
-                int id = readInt("Enter Post-it ID to search: ");
-                board.displayPostIt(id);
-                break;
-            }
-            case 5: {
-                int id = readInt("Enter Post-it ID to delete: ");
-                board.deletePostIt(id);
-                break;
-            }
-            case 6: {
-                int id = readInt("Enter Post-it ID to pin: ");
-                board.pinPostIt(id);
-                break;
-            }
-            case 7: {
-                board.saveToFile();
-                break;
-            }
-            case 8: {
-                board.loadFromFile();
-                break;
-            } case 9: {
-                std::cout << "GOODBYE";
-                return 0;
-            }
-            default:
-                std::cout << "Invalid choice. Please try again.\n";
-        }
+    switch (cmd) {
+        case Command::Add:
+            handleAdd(argc, argv, board);
+            break;
+        case Command::List:
+            handleList(board);
+            break;
+        default:
+            std::cout << "not implemented.\n";
     }
 
+
+    return 0;
 }
 
 int readInt(const std::string& prompt) {
@@ -99,4 +67,58 @@ std::string readString(const std::string& prompt) {
     std::cout << prompt;
     std::getline(std::cin, value);
     return value;
+}
+
+std::string getFlagArg(int argc, char* argv[], const std::string &flag) {
+    for (int i =1; i < argc; i++) {
+        std::string arg = argv[i];
+
+        size_t pos = arg.rfind(flag);
+
+        if (pos != std::string::npos) {
+            return arg.substr(pos + flag.length(), arg.length());
+        }
+
+    }
+    return "";
+    }
+
+Command parseCommand(const std::string& cmd) {
+    if (cmd == "add") {
+        return Command::Add;
+    }
+    if (cmd == "list") {
+        return Command::List;
+    }
+    if (cmd == "delete") {
+        return Command::Delete;
+    }
+    if (cmd == "search") {
+        return Command::Search;
+    }
+
+    if (cmd == "pin") {
+        return Command::Pin;
+    }
+
+    if (cmd == "unpin") {
+        return Command::Unpin;
+    }
+
+    return Command::Unknown;
+}
+
+void handleAdd(int argc, char* argv[], PostItBoard &postItBoard) {
+    postItBoard.loadFromFile();
+    std::string title = getFlagArg(argc, argv, "--title=");
+    std::string message = getFlagArg(argc, argv, "--message=");
+    std::string color = getFlagArg(argc, argv, "--color=");
+
+    postItBoard.createPostIt(title, message, color);
+    postItBoard.saveToFile();
+}
+
+void handleList(PostItBoard &postItBoard) {
+    postItBoard.loadFromFile();
+    postItBoard.listPostIts();
 }
